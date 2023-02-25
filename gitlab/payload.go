@@ -334,7 +334,9 @@ type ObjectAttributes struct {
 	UpdatedByID      int64      `json:"updated_by_id"`
 	LastEditedAt     customTime `json:"last_edited_at"`
 	LastEditedByID   int64      `json:"last_edited_by_id"`
+	DiscussionID     string     `json:"discussion_id"`
 	RelativePosition int64      `json:"relative_position"`
+	OriginalPosition Position   `json:"original_position"`
 	Position         Position   `json:"position"`
 	BranchName       string     `json:"branch_name"`
 	Description      string     `json:"description"`
@@ -367,11 +369,11 @@ type ObjectAttributes struct {
 	Stages           []string   `json:"stages"`
 	Duration         int64      `json:"duration"`
 	Note             string     `json:"note"`
-	NotebookType     string     `json:"noteable_type"` // nolint:misspell
 	At               customTime `json:"attachment"`
 	LineCode         string     `json:"line_code"`
 	CommitID         string     `json:"commit_id"`
 	NoteableID       int64      `json:"noteable_id"` // nolint: misspell
+	NoteableType     string     `json:"noteable_type"`
 	System           bool       `json:"system"`
 	WorkInProgress   bool       `json:"work_in_progress"`
 	StDiffs          []StDiff   `json:"st_diffs"`
@@ -410,18 +412,31 @@ type Variable struct {
 // Text position will have: new_line and old_line
 // Image position will have: width, height, x, y
 type Position struct {
-	BaseSHA      string `json:"base_sha"`
-	StartSHA     string `json:"start_sha"`
-	HeadSHA      string `json:"head_sha"`
-	OldPath      string `json:"old_path"`
-	NewPath      string `json:"new_path"`
-	PositionType string `json:"position_type"`
-	OldLine      int64  `json:"old_line"`
-	NewLine      int64  `json:"new_line"`
-	Width        int64  `json:"width"`
-	Height       int64  `json:"height"`
-	X            int64  `json:"x"`
-	Y            int64  `json:"y"`
+	BaseSHA      string    `json:"base_sha"`
+	StartSHA     string    `json:"start_sha"`
+	HeadSHA      string    `json:"head_sha"`
+	OldPath      string    `json:"old_path"`
+	NewPath      string    `json:"new_path"`
+	PositionType string    `json:"position_type"`
+	OldLine      int64     `json:"old_line"`
+	NewLine      int64     `json:"new_line"`
+	Width        int64     `json:"width"`
+	Height       int64     `json:"height"`
+	X            int64     `json:"x"`
+	Y            int64     `json:"y"`
+	LineRange    LineRange `json:"line_range"`
+}
+
+type LineRange struct {
+	Start LineRangeDetails `json:"start"`
+	End   LineRangeDetails `json:"end"`
+}
+
+type LineRangeDetails struct {
+	LineCode string `json:"line_code"`
+	Type     string `json:"type"`
+	OldLine  *int64 `json:"old_line"`
+	NewLine  *int64 `json:"new_line"`
 }
 
 // MergeRequest contains all of the GitLab merge request information
